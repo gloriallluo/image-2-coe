@@ -1,0 +1,38 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="3">
+            <item index="0" class="java.lang.String" itemvalue="pymysql" />
+            <item index="1" class="java.lang.String" itemvalue="flask" />
+            <item index="2" class="java.lang.String" itemvalue="flask_sqlalchemy" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+          <option value="N803" />
+          <option value="N801" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="minidecaf.main.antlr4" />
+          <option value="minidecaf.main.FileStream" />
+          <option value="minidecaf.main.CommonTokenStream" />
+          <option value="minidecaf.main.BailErrorStrategy" />
+          <option value="minidecaf.typecheck.types.Type.point_to" />
+          <option value="minidecaf.typecheck.types.Type.base" />
+          <option value="minidecaf.typecheck.types.Type.length" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
