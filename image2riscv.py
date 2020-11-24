@@ -30,7 +30,7 @@ def Convert(image_name):
     line_offset = 'a2'
     large_line_offset = 'a3'
     color = 'a4'
-    offset = 4  # TODO: offset not sure
+    offset = 4
 
     # Create a .s file and open it.
     # Write the header to the file, where lines that start with ';'
@@ -45,7 +45,7 @@ def Convert(image_name):
 
         # initialization code
         img_riscv.write(f"\tori {count}, zero, 4\n")
-        img_riscv.write(f"\tori {base_addr}, zero, 0\n")    # TODO: base_addr initialization not sure
+        img_riscv.write(f"\tlui {base_addr}, 0x30000\n")
         img_riscv.write(f"\tori {line_offset}, zero, {offset * 600}\n")
         img_riscv.write(f"\tori {large_line_offset}, zero, 0x268\n")
         img_riscv.write(f"\tlui {large_line_offset}, 0x1d\n")
