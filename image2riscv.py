@@ -25,11 +25,11 @@ def Convert(image_name):
     i = 't0'
     j = 't1'
     count = 't2'
-    base_addr = 'a0'
-    addr = 'a1'
-    line_offset = 'a2'
-    large_line_offset = 'a3'
-    color = 'a4'
+    base_addr = 'a1'
+    addr = 'a2'
+    line_offset = 'a3'
+    large_line_offset = 'a4'
+    color = 'a5'
     offset = 4
 
     # Create a .s file and open it.
@@ -46,15 +46,17 @@ def Convert(image_name):
         # initialization code
         img_riscv.write(f"\tori {count}, zero, 4\n")
         img_riscv.write(f"\tlui {base_addr}, 0x30000\n")
-        img_riscv.write(f"\tori {line_offset}, zero, {offset * 600}\n")
+        img_riscv.write(f"\tori {line_offset}, zero, {int(offset * 600 / 16)}\n")   # TODO: not good
+        img_riscv.write(f"\tslli {line_offset}, {line_offset}, 4\n")
         img_riscv.write(f"\tori {large_line_offset}, zero, 0x268\n")
         img_riscv.write(f"\tlui {large_line_offset}, 0x1d\n")
+        img_riscv.write(f"\tslli {large_line_offset}, {large_line_offset}, 2\n")
 
         # in outer loop, save a line
         img_riscv.write(f"\tori {i}, zero, 0\n")
         img_riscv.write("_OUTER_LOOP:\n")
 
-        # in inner loop
+        # in inner loop, save a block
         img_riscv.write(f"\tori {j}, zero, 0\n")
         img_riscv.write(f"_INNER_LOOP:\n")
 
@@ -87,7 +89,7 @@ def Convert(image_name):
                 # zero was not handled properly
                 try:
                     img_riscv.write(f"\tori {color}, zero, {int(out_byte, 2)}\n")
-                    img_riscv.write(f"\twb {color}, 0({addr})\n")
+                    img_riscv.write(f"\tsb {color}, 0({addr})\n")
                     img_riscv.write(f"\taddi {addr}, {addr}, {offset}\n")
                 except ValueError:
                     print('Value Error Occurred At:')
@@ -97,7 +99,7 @@ def Convert(image_name):
                     sys.exit()
 
             line_cnt += 1
-            img_riscv.write(f"\taddi {addr}, {addr}, {line_offset}\n")
+            img_riscv.write(f"\tadd {addr}, {addr}, {line_offset}\n")
 
         # inner loop
         img_riscv.write(f"\taddi {base_addr}, {base_addr}, {offset * 200}\n")
@@ -108,6 +110,8 @@ def Convert(image_name):
         img_riscv.write(f"\tadd {base_addr}, {base_addr}, {large_line_offset}\n")
         img_riscv.write(f"\taddi {i}, {i}, 1\n")
         img_riscv.write(f"\tbne {i}, {count}, _OUTER_LOOP\n")
+        img_riscv.write(f"\tret\n")
+        img_riscv.write("\n")
     print(f'RISC-V File: {filename} DONE')
     print(f'Converted from {filetype} to .s')
 
